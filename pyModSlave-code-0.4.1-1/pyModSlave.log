@@ -1,0 +1,3 @@
+2018-11-27 16:15:11,526	ERROR	pyModSlave._load_params	MainThread	Parameters file does not exist
+2018-11-27 16:15:48,548	ERROR	ModFactory.ModSvrFactory	MainThread	Error while building RTU Server : global name 'serial' is not defined
+2018-11-27 16:15:48,549	ERROR	pyModSlave._start_stop	MainThread	Fail to start server
