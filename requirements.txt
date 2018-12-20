@@ -1,0 +1,8 @@
+pytz==2018.4
+django==2.0.8
+pyserial==3.4
+six==1.11.0
+Pillow==5.3.0
+pymodbus==1.5.2
+pyyaml==3.12
+gunicorn==19.8.1

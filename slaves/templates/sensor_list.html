@@ -1,0 +1,562 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+<style>
+  #exampleModalLongTitle h1 {
+    text-align: center;
+  }
+</style>
+
+<div id="map">
+    <div class="leaflet-control-container">
+        <div class="leaflet-top leaflet-left">
+            <div class="leaflet-control-zoom leaflet-bar leaflet-control">
+                <a class="leaflet-control-zoom-in" href="#" title="Zoom in" role ="button" aria-label="Zoom in">+</a>
+                <a class="leaflet-control-zoom-out" href="#" title="Zoom out" role ="button" aria-label="Zoom out">-</a>
+            </div>
+            <div class="leaflet-control-layers leaflet-control" aria-haspopup="true">
+                <a class="leaflet-control-layers-toggle" href="#" title="Layers"></a>
+                <form class="leaflet-control-layers-list">
+                    <div class="leaflet-control-layers-base">
+                        <label>
+                            <div>
+                                <input type="radio" class="leaflet-control-layers-selector" name="leaflet-base-layers">
+                                <span>Street</span>
+                            </div>
+                        </label>
+                        <label>
+                            <div>
+                                <input type="radio" class="leaflet-control-layers-selector" name="leaflet-base-layers" checked="checked">
+                                <span>Satellite</span>
+                            </div>
+                        </label>
+                        <label>
+                            <div>
+                                <input type="radio" class="leaflet-control-layers-selector" name="leaflet-base-layers">
+                                <span>Terrian</span>
+                            </div>
+                        </label>   
+                    </div>
+                    <div class="leaflet-control-layers-separator" style="display: none;"></div>
+                    <div class="leaflet-control-layers-overlays"></div>
+                </form>                         
+            </div>
+        </div>
+    </div>
+</div>
+<div class="">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <img src="/static/img/logo1.png">
+      <span class="navbar-brand" href="#">Warning System</span>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#"><i class="fa fa-home"></i> <b>Home</b></a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="nav-link" href="#" data-toggle="modal" data-target="#waterlevel"><b>Water Level</b></a>
+            </li>
+           
+            <li class="nav-item">
+              <a class="nav-link" href="#"><b>Activate Alarm</b></a>
+            </li>
+
+            <!-- <li class="nav-item">
+              <a class="nav-link" href="#"><b>Activate Stored Message</b></a>
+            </li> -->
+
+            <li class="nav-item">
+              <a class="nav-link" href="#"><b>Stream audio</b></a>
+            </li>
+
+            <!-- <li class="nav-item">
+              <a class="nav-link" href="#"><b>Activate Public Address</b></a>
+            </li> -->
+
+            <li class="nav-item dropdown" style="padding-right: 10px;">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:black;">
+                <b>Admin</b>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="#"><i class="fa fa-list-alt"></i> <b>Systems log</b></a>
+                <!-- <a class="dropdown-item" href="#">Another action</a> -->
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'logout' %}">logout</a>
+                </div>
+            </li>
+          </ul>
+          <!-- <form class="form-inline my-2 my-lg-0">
+          <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form> -->
+      </div>
+  </nav>
+</div>
+  
+<script>
+    var Masterlatlng = [28.5942565,77.3182577]
+    var RS1latlng = [28.7942565,77.3182577]
+    var RS2latlng = [28.9942565,77.3182577]
+    var RS3latlng = [28.3942565,77.3182577]
+    var RS4latlng = [28.1942565,77.3182577]
+    var RS5latlng = [28.0142565,77.3182577]
+    var map = L.map('map', {scrollWheelZoom:false}).setView(Masterlatlng,9);
+
+    var map_osm = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="#">Powered by SiRCom SMART Alert (OSM)</a>.',
+        maxZoom: 18,
+        minZoom: 5
+    });
+
+    //  add base map tiles from OpenStreetMap and attribution info to 'map' div
+    var map_satellite = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        attribution: '&copy; <a href="http://telecon-systems.com/">Powered by Telecon Systems</a>',
+        // maxZoom: 18,
+        // minZoom: 5
+
+    });
+
+    var map_terrain = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}.{ext}', {
+        attribution: '&copy; <a href="#">Powered by SiRCom SMART Alert (Fastly)</a>.',
+        subdomains: 'abcd',
+        ext: 'png',
+        maxZoom: 14,
+        minZoom: 5
+    });   
+    
+    var layers = {
+        'Streets':   map_osm,
+        'Satellite': map_satellite,
+        'Terrain':   map_terrain
+    };
+
+    unitLayer = L.geoJson().addTo(map);     
+    mapLayer  = L.geoJson().addTo(map);
+    L.control.layers(layers).setPosition('topleft').addTo(map);
+
+    // create custom icon
+    var SirenIcon = L.icon({
+        iconUrl: '/static/icons/siren-green.png',
+        iconSize: [70, 70], // size of the icon
+        popupAnchor: [0,-15]
+        });
+
+    map_satellite.addTo(map);
+
+    L.marker(Masterlatlng, {icon: SirenIcon}).addTo(map).on('click', MasterModal);
+        
+    function MasterModal(e) {
+        $('#exampleModal').modal('show');
+    }
+    
+    L.marker(RS1latlng, {icon: SirenIcon}).addTo(map).on('click', RS1Modal);
+    
+    function RS1Modal(e) {
+        $('#exModal1').modal('show');
+    }
+
+    L.marker(RS2latlng, {icon: SirenIcon}).addTo(map).on('click', RS2Modal);
+    
+    function RS2Modal(e) {
+        $('#exModal2').modal('show');
+    }
+
+    L.marker(RS3latlng, {icon: SirenIcon}).addTo(map).on('click', RS3Modal);
+    
+    function RS3Modal(e) {
+        $('#exModal3').modal('show');
+    }
+
+    L.marker(RS4latlng, {icon: SirenIcon}).addTo(map).on('click', RS4Modal);
+    
+    function RS4Modal(e) {
+        $('#exModal4').modal('show');
+    }
+
+    L.marker(RS5latlng, {icon: SirenIcon}).addTo(map).on('click', RS5Modal);
+    
+    function RS5Modal(e) {
+        $('#exModal5').modal('show');
+    }
+
+// try {
+//     loadMap();
+// } catch (err) {
+//     if (Boolean(debug))
+//         console.log(err);
+// }
+
+</script>
+<div class="container">
+    <table class="table">
+        <tbody>
+            <i class="fa fa-bell" aria-hidden="true" data-toggle="modal" data-target="#exampleModal"></i>
+            <i class="fa fa-registered" aria-hidden="true" data-toggle="modal" data-target="#exModal1"></i>
+            <i class="fa fa-registered" aria-hidden="true" data-toggle="modal" data-target="#exModal2"></i>
+            <i class="fa fa-registered" aria-hidden="true" data-toggle="modal" data-target="#exModal3"></i>
+            <i class="fa fa-registered" aria-hidden="true" data-toggle="modal" data-target="#exModal4"></i>
+            <i class="fa fa-registered" aria-hidden="true" data-toggle="modal" data-target="#exModal5"></i>
+            <i class="fa fa-registered" aria-hidden='true' data-toggle="modal"
+            data-target="#1">
+        </tbody>
+    </table>
+</div>
+
+
+<div class="modal fade" id="waterlevel" role="dialog" style="width: 100%; height: 50%;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Water Level</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="chart">
+          {% if chart %}
+            {{ chart.as_html }}
+          {% else %}
+            <h3>There is no data available</h3>
+          {% endif %}
+        </div>
+      </div>
+      <!-- <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div> -->
+    </div>
+  </div>
+</div>
+<!-- Master Modal -->
+<div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h1 class="modal-title w-100" id="exampleModalLongTitle">Master</h1>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row">
+                  {% for sensor in sensor_data.Master %}
+                  <div class="col-sm-3 py-1">
+                    {% cycle '<tr>' '' '' '' %}
+                      {% if sensor.value == 0 %}
+                      <div class="card card-body h-55 text-white bg-danger">
+                        <td>{{ sensor.name }}</td>
+                        <td style="border: 1px solid black;">{{ sensor.value }}</td>
+                        <br>
+                        <br>
+                        {% if sensor.has_icon %}
+                          <i class="{{ sensor.getIcon }} fa-2x img-responsive rounded mx-auto d-block" aria-hidden="true"></i>
+                        {% else %}
+                          <img src="{{ sensor.getIcon }}" class="img-responsive rounded mx-auto d-block" width="40" height="40"/>
+                        {% endif %}
+                      </div>
+                      {% else %}
+                      <div class="card card-body h-55 text-white bg-success">
+                        <td class="alert">{{ sensor.name }}</td>
+                        <td class="alert" style="border: 1px solid black;">{{ sensor.value }}</td>
+                        <br>
+                        <br>
+                        {% if sensor.has_icon %}
+                          <i class="{{ sensor.getIcon }} fa-2x img-responsive rounded mx-auto d-block" aria-hidden="true"></i>
+                        {% else %}
+                          <img src="{{ sensor.getIcon }}" class="img-responsive rounded mx-auto d-block" width="40" height="40"/>
+                        {% endif %}
+                      </div>
+                      {% endif %}
+                      {% cycle '' '' '' '</tr>' %}
+                  </div> 
+                  {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade bd-ex-modal1-lg" id="exModal1" tabindex="-1" role="dialog" aria-labelledby="exModal1CenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h1 class="modal-title w-100" id="exModal1LongTitle">RS1</h1>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row">
+                  {% for sensor in sensor_data.RS1 %}
+                  <div class="col-sm-4 py-2">
+                    {% cycle '<tr>' '' '' '' %}
+                      {% if sensor.value == 0 %}
+                      <div class="card card-body h-55 text-white bg-primary">
+                        <td>{{ sensor.name }}</td>
+                        <td style="border: 1px solid black;">{{ sensor.value }}</td>
+                        <br>
+                        <br>
+                        {% if sensor.has_icon %}
+                          <i class="{{ sensor.getIcon }} fa-2x img-responsive rounded mx-auto d-block" aria-hidden="true"></i>
+                        {% else %}
+                          <img src="{{ sensor.getIcon }}" class="img-responsive rounded mx-auto d-block" width="40" height="40" background='none' />
+                        {% endif %}
+                      </div>
+                      {% else %}
+                      <div class="card card-body h-55 text-white bg-success">
+                        <td class="alert">{{ sensor.name }}</td>
+                        <td class="alert" style="border: 1px solid black;">{{ sensor.value }}</td>
+                        <br>
+                        <br>
+                        {% if sensor.has_icon %}
+                          <i class="{{ sensor.getIcon }} fa-2x img-responsive rounded mx-auto d-block" aria-hidden="true"></i>
+                        {% else %}
+                          <img src="{{ sensor.getIcon }}" class="img-responsive rounded mx-auto d-block" width="40" height="40"/>
+                        {% endif %}
+                      </div>
+                      {% endif %}
+                      {% cycle '' '' '' '</tr>' %}
+                  </div> 
+                  {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+</div>                  
+
+<div class="modal fade bd-ex-modal2-lg" id="exModal2" tabindex="-1" role="dialog" aria-labelledby="exModal2CenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h1 class="modal-title w-100" id="exModal2LongTitle">RS2</h1>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row">
+                  {% for sensor in sensor_data.RS2 %}
+                  <div class="col-sm-4 py-2">
+                    {% cycle '<tr>' '' '' '' %}
+                      {% if sensor.value == 0 %}
+                      <div class="card card-body h-55 text-white bg-secondary">
+                        <td>{{ sensor.name }}</td>
+                        <td style="border: 1px solid black;">{{ sensor.value }}</td>
+                        <br>
+                        <br>
+                        {% if sensor.has_icon %}
+                          <i class="{{ sensor.getIcon }} fa-2x img-responsive rounded mx-auto d-block" aria-hidden="true"></i>
+                        {% else %}
+                          <img src="{{ sensor.getIcon }}" class="img-responsive rounded mx-auto d-block" width="40" height="40" background='none' />
+                        {% endif %}
+                      </div>
+                      {% else %}
+                      <div class="card card-body h-55 text-white bg-success">
+                        <td class="alert">{{ sensor.name }}</td>
+                        <td class="alert" style="border: 1px solid black;">{{ sensor.value }}</td>
+                        <br>
+                        <br>
+                        {% if sensor.has_icon %}
+                          <i class="{{ sensor.getIcon }} fa-2x img-responsive rounded mx-auto d-block" aria-hidden="true"></i>
+                        {% else %}
+                          <img src="{{ sensor.getIcon }}" class="img-responsive rounded mx-auto d-block" width="40" height="40"/>
+                        {% endif %}
+                      </div>
+                      {% endif %}
+                      {% cycle '' '' '' '</tr>' %}
+                  </div> 
+                  {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+</div>                  
+
+<div class="modal fade bd-ex-modal3-lg" id="exModal3" tabindex="-1" role="dialog" aria-labelledby="exModal3CenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h1 class="modal-title w-100" id="exModal3LongTitle">RS3</h1>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row">
+                  {% for sensor in sensor_data.RS3 %}
+                  <div class="col-sm-4 py-2">
+                    <div class="card card-body h-55 text-white bg-danger">
+                      {% cycle '<tr>' '' '' '' %}
+                        {% if sensor.value == 0 %}
+                          <td>{{ sensor.name }}</td>
+                          <td style="border: 1px solid black;">{{ sensor.value }}</td>
+                          <br>
+                          <br>
+                          {% if sensor.has_icon %}
+                            <i class="{{ sensor.getIcon }} fa-2x img-responsive rounded mx-auto d-block" aria-hidden="true"></i>
+                          {% else %}
+                            <img src="{{ sensor.getIcon }}" class="img-responsive rounded mx-auto d-block" width="40" height="40" background='none' />
+                          {% endif %}
+
+                        {% else %}
+                        <div class="card card-body h-55 text-white bg-success">
+                          <td class="alert">{{ sensor.name }}</td>
+                          <td class="alert" style="border: 1px solid black;">{{ sensor.value }}</td>
+                          <br>
+                          <br>
+                          {% if sensor.has_icon %}
+                            <i class="{{ sensor.getIcon }} fa-2x img-responsive rounded mx-auto d-block" aria-hidden="true"></i>
+                          {% else %}
+                            <img src="{{ sensor.getIcon }}" class="img-responsive rounded mx-auto d-block" width="40" height="40"/>
+                          {% endif %}
+                        </div>
+                        {% endif %}
+                        {% cycle '' '' '' '</tr>' %}
+                    </div>
+                  </div> 
+                  {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+</div>    
+
+<div class="modal fade bd-ex-modal4-lg" id="exModal4" tabindex="-1" role="dialog" aria-labelledby="exModal4CenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h1 class="modal-title w-100" id="exModal4LongTitle">RS4</h1>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row">
+                  {% for sensor in sensor_data.RS4 %}
+                  <div class="col-sm-3 py-1">
+                    {% cycle '<tr>' '' '' '' %}
+                      {% if sensor.value == 0 %}
+                      <div class="card card-body h-55 text-white bg-info">
+                        <td>{{ sensor.name }}</td>
+                        <td style="border: 1px solid black;">{{ sensor.value }}</td>
+                        <br>
+                        <br>
+                        {% if sensor.has_icon %}
+                          <i class="{{ sensor.getIcon }} fa-2x img-responsive rounded mx-auto d-block" aria-hidden="true"></i>
+                        {% else %}
+                          <img src="{{ sensor.getIcon }}" class="img-responsive rounded mx-auto d-block" width="40" height="40" background='none' />
+                        {% endif %}
+                      </div>
+                      {% else %}
+                      <div class="card card-body h-55 text-white bg-success">
+                        <td class="alert">{{ sensor.name }}</td>
+                        <td class="alert" style="border: 1px solid black;">{{ sensor.value }}</td>
+                        <br>
+                        <br>
+                        {% if sensor.has_icon %}
+                          <i class="{{ sensor.getIcon }} fa-2x img-responsive rounded mx-auto d-block" aria-hidden="true"></i>
+                        {% else %}
+                          <img src="{{ sensor.getIcon }}" class="img-responsive rounded mx-auto d-block" width="40" height="40"/>
+                        {% endif %}
+                      </div>
+                      {% endif %}
+                      {% cycle '' '' '' '</tr>' %}
+                  </div> 
+                  {% endfor %}
+
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+</div>                                
+
+<div class="modal fade bd-ex-modal5-lg" id="exModal5" tabindex="-1" role="dialog" aria-labelledby="exModal5CenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h1 class="modal-title w-100" id="exModal5LongTitle">RS5</h1>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <div class="row">
+                  {% for sensor in sensor_data.RS5 %}
+                  <div class="col-sm-3 py-1">
+                    {% cycle '<tr>' '' '' '' %}
+                      {% if sensor.value == 0 %}
+                      <div class="card card-body h-55 text-white bg-warning">
+                        <td>{{ sensor.name }}</td>
+                        <td style="border: 1px solid black;">{{ sensor.value }}</td>
+                        <br>
+                        <br>
+                        {% if sensor.has_icon %}
+                          <i class="{{ sensor.getIcon }} fa-2x img-responsive rounded mx-auto d-block" aria-hidden="true"></i>
+                        {% else %}
+                          <img src="{{ sensor.getIcon }}" class="img-responsive rounded mx-auto d-block" width="40" height="40" background='none' />
+                        {% endif %}
+                      </div>
+                      {% else %}
+                      <div class="card card-body h-55 text-white bg-success">
+                        <td class="alert">{{ sensor.name }}</td>
+                        <td class="alert" style="border: 1px solid black;">{{ sensor.value }}</td>
+                        <br>
+                        <br>
+                        {% if sensor.has_icon %}
+                          <i class="{{ sensor.getIcon }} fa-2x img-responsive rounded mx-auto d-block" aria-hidden="true"></i>
+                        {% else %}
+                          <img src="{{ sensor.getIcon }}" class="img-responsive rounded mx-auto d-block" width="40" height="40"/>
+                        {% endif %}
+                      </div>
+                      {% endif %}
+                      {% cycle '' '' '' '</tr>' %}
+                  </div> 
+                  {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- End Master Modal -->
+{% endblock %}

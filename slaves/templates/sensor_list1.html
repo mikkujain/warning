@@ -1,0 +1,201 @@
+<html>
+  <head>
+    <title>{{ system_name }}</title>
+
+    <meta http-equiv="refresh" content="300">
+
+    <style>
+      table, th, td {
+          border: 1px black;
+          border-collapse: collapse;
+      }
+      th {
+          padding: 10px;
+          text-align: centre;
+          text-decoration: underline;
+      }
+      td {
+          padding: 10px;
+          text-align: right;
+      }
+      .error {
+          color: red;
+      }
+      .warning {
+          color: orange;
+      }
+      .alert {
+          color: blue;
+      }
+      form {
+          width: 100%;
+          margin: 0 auto;
+      }
+      .button {
+          background-color: #4CAF50; /* Green */
+          border: 1px solid black;
+          color: white;
+          padding: 10px 20px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+      }
+      h3 {
+          text-align: centre;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1 style="text-align:center"> {{ system_name }} </h1>
+
+    <div class="error">
+      {% for err in errors %}
+      <h4> Error: {{ err.message }} </h4>
+      {% endfor %}
+    </div>
+
+    <br />
+
+    <div>
+      {% for tr in sensor_data.thresholds %}
+      {% if tr.value %}
+      <h3 style="text-align:centre;">Thresholds reached:</h3>
+      {% for v in tr.value %}
+      <span class="warning">&nbsp;&nbsp;- {{ v }} </span>
+      {% endfor %}
+      {% endif %}
+      {% endfor %}
+    </div>
+
+    <br />
+
+    <table cell-padding="10">
+      <tr>
+        <th colspan=8>Master</th>
+      </tr>
+      {% for sensor in sensor_data.Master %}
+      {% cycle '<tr>' '' '' '' %}
+        {% if sensor.value == 0 %}
+        <td>{{ sensor.name }}</td>
+        <td style="border: 1px solid black;">{{ sensor.value }}</td>
+        {% else %}
+        <td class="alert">{{ sensor.name }}</td>
+        <td class="alert" style="border: 1px solid black;">{{ sensor.value }}</td>
+        {% endif %}
+        {% cycle '' '' '' '</tr>' %}
+      {% endfor %}
+
+      <tr><td></td></tr>
+
+      <tr>
+        <td></td>
+        <td colspan=3>
+          <form action="#" method="post">{% csrf_token %}
+            <input type="submit" class="button" value="Master Test GSM Health Manual"
+                   name="flag">
+          </form>
+        </td>
+
+        <td colspan=2>
+          <form action="#" method="post">{% csrf_token %}
+            <input type="submit" class="button" value="Master Auto GSM health test ON"
+                   name="flag">
+          </form>
+        </td>
+        <td></td><td></td>
+      </tr>
+
+      <tr><td>&nbsp;</td></tr>
+
+      <tr>
+        <th colspan=8>RS1</th>
+      </tr>
+      {% for sensor in sensor_data.RS1 %}
+      {% cycle '<tr>' '' '' '' %}
+        {% if sensor.value == 0 %}
+        <td>{{ sensor.name }}</td>
+        <td style="border: 1px solid black;">{{ sensor.value }}</td>
+        {% else %}
+        <td class="alert">{{ sensor.name }}</td>
+        <td class="alert" style="border: 1px solid black;">{{ sensor.value }}</td>
+        {% endif %}
+        {% cycle '' '' '' '</tr>' %}
+      {% endfor %}
+
+      <tr><td>&nbsp;</td></tr>
+
+      <tr>
+        <th colspan=8>RS2</th>
+      </tr>
+      {% for sensor in sensor_data.RS2 %}
+      {% cycle '<tr>' '' '' '' %}
+        {% if sensor.value == 0 %}
+        <td>{{ sensor.name }}</td>
+        <td style="border: 1px solid black;">{{ sensor.value }}</td>
+        {% else %}
+        <td class="alert">{{ sensor.name }}</td>
+        <td class="alert" style="border: 1px solid black;">{{ sensor.value }}</td>
+        {% endif %}
+        {% cycle '' '' '' '</tr>' %}
+      {% endfor %}
+
+      <tr><td>&nbsp;</td></tr>
+
+      <tr>
+        <th colspan=8>RS3</th>
+      </tr>
+      {% for sensor in sensor_data.RS3 %}
+      {% cycle '<tr>' '' '' '' %}
+        {% if sensor.value == 0 %}
+        <td>{{ sensor.name }}</td>
+        <td style="border: 1px solid black;">{{ sensor.value }}</td>
+        {% else %}
+        <td class="alert">{{ sensor.name }}</td>
+        <td class="alert" style="border: 1px solid black;">{{ sensor.value }}</td>
+        {% endif %}
+        {% cycle '' '' '' '</tr>' %}
+      {% endfor %}
+
+      <tr><td>&nbsp;</td></tr>
+
+      <tr>
+        <th colspan=8>RS4</th>
+      </tr>
+      {% for sensor in sensor_data.RS4 %}
+      {% cycle '<tr>' '' '' '' %}
+        {% if sensor.value == 0 %}
+        <td>{{ sensor.name }}</td>
+        <td style="border: 1px solid black;">{{ sensor.value }}</td>
+        {% else %}
+        <td class="alert">{{ sensor.name }}</td>
+        <td class="alert" style="border: 1px solid black;">{{ sensor.value }}</td>
+        {% endif %}
+        {% cycle '' '' '' '</tr>' %}
+      {% endfor %}
+
+      <tr><td>&nbsp;</td></tr>
+
+      <tr>
+        <th colspan=8>RS5</th>
+      </tr>
+      {% for sensor in sensor_data.RS5 %}
+      {% cycle '<tr>' '' '' '' %}
+        {% if sensor.value == 0 %}
+        <td>{{ sensor.name }}</td>
+        <td style="border: 1px solid black;">{{ sensor.value }}</td>
+        {% else %}
+        <td class="alert">{{ sensor.name }}</td>
+        <td class="alert" style="border: 1px solid black;">{{ sensor.value }}</td>
+        {% endif %}
+        {% cycle '' '' '' '</tr>' %}
+      {% endfor %}
+
+    </table>
+
+    <br />
+    <br />
+  </body>
+
+</html>

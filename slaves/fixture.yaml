@@ -1,0 +1,397 @@
+- model: slaves.system
+  pk: 1
+  fields: {name: HP Warning System, number_slaves: 4}
+- model: slaves.slave
+  pk: 1
+  fields: {name: PLC 1214DC, sid: 1, ip: 127.0.0.1, port: 502, query_frequency: 5,
+    system: 1, primary: true}
+- model: slaves.sensor
+  pk: 5
+  fields: {name: RS1 Flags 1, address: 0, nregisters: 1, slave: 1, isFlags: true,
+    multiplication_factor: 1.0}
+- model: slaves.sensor
+  pk: 6
+  fields: {name: RS1 Spare, address: 1, nregisters: 1, slave: 1, isFlags: false, multiplication_factor: 1.0}
+- model: slaves.sensor
+  pk: 7
+  fields: {name: RS2 Flags 1, address: 2, nregisters: 1, slave: 1, isFlags: true,
+    multiplication_factor: 1.0}
+- model: slaves.sensor
+  pk: 8
+  fields: {name: RS2 Spare, address: 3, nregisters: 1, slave: 1, isFlags: false, multiplication_factor: 1.0}
+- model: slaves.sensor
+  pk: 9
+  fields: {name: RS3 Flags 1, address: 4, nregisters: 1, slave: 1, isFlags: true,
+    multiplication_factor: 1.0}
+- model: slaves.sensor
+  pk: 10
+  fields: {name: RS3 Spare, address: 5, nregisters: 1, slave: 1, isFlags: false, multiplication_factor: 1.0}
+- model: slaves.sensor
+  pk: 11
+  fields: {name: RS4 Flags 1, address: 6, nregisters: 1, slave: 1, isFlags: true,
+    multiplication_factor: 1.0}
+- model: slaves.sensor
+  pk: 12
+  fields: {name: RS4 Spare, address: 7, nregisters: 1, slave: 1, isFlags: false, multiplication_factor: 1.0}
+- model: slaves.sensor
+  pk: 13
+  fields: {name: RS5 Flags 1, address: 8, nregisters: 1, slave: 1, isFlags: true,
+    multiplication_factor: 1.0}
+- model: slaves.sensor
+  pk: 14
+  fields: {name: RS5 Spare, address: 9, nregisters: 1, slave: 1, isFlags: false, multiplication_factor: 1.0}
+- model: slaves.sensor
+  pk: 15
+  fields: {name: Master Flags 1, address: 10, nregisters: 1, slave: 1, isFlags: true,
+    multiplication_factor: 1.0}
+- model: slaves.sensor
+  pk: 16
+  fields: {name: Master Spare, address: 11, nregisters: 1, slave: 1, isFlags: false,
+    multiplication_factor: 1.0}
+- model: slaves.sensor
+  pk: 17
+  fields: {name: Master Flags 2, address: 12, nregisters: 1, slave: 1, isFlags: true,
+    multiplication_factor: 1.0}
+- model: slaves.sensor
+  pk: 18
+  fields: {name: Master Test Interval GSM Health, address: 13, nregisters: 1, slave: 1,
+    isFlags: false, multiplication_factor: 1.0}
+- model: slaves.sensor
+  pk: 19
+  fields: {name: Master Actual Level, address: 14, nregisters: 1, slave: 1, isFlags: false,
+    multiplication_factor: 0.1}
+- model: slaves.sensor
+  pk: 20
+  fields: {name: Master Set Level, address: 15, nregisters: 1, slave: 1, isFlags: false,
+    multiplication_factor: 0.1}
+- model: slaves.flag
+  pk: 1
+  fields: {name: RS1 Status DI Strobe Light, bit_location: 0, sensor: 5}
+- model: slaves.flag
+  pk: 2
+  fields: {name: RS1 Status DI PA system, bit_location: 1, sensor: 5}
+- model: slaves.flag
+  pk: 3
+  fields: {name: RS1 Status DI Hooter, bit_location: 2, sensor: 5}
+- model: slaves.flag
+  pk: 4
+  fields: {name: RS1 Status DI Power failure, bit_location: 3, sensor: 5}
+- model: slaves.flag
+  pk: 5
+  fields: {name: RS1 Status DI Emergency, bit_location: 4, sensor: 5}
+- model: slaves.flag
+  pk: 6
+  fields: {name: RS1 DI Spare 1, bit_location: 5, sensor: 5}
+- model: slaves.flag
+  pk: 7
+  fields: {name: RS1 DI Spare 2, bit_location: 6, sensor: 5}
+- model: slaves.flag
+  pk: 8
+  fields: {name: RS1 DI Spare 3, bit_location: 7, sensor: 5}
+- model: slaves.flag
+  pk: 9
+  fields: {name: RS1 Status DO Strobe Light, bit_location: 8, sensor: 5}
+- model: slaves.flag
+  pk: 10
+  fields: {name: RS1 Status DO PA system, bit_location: 9, sensor: 5}
+- model: slaves.flag
+  pk: 11
+  fields: {name: RS1 Status DO Hooter, bit_location: 10, sensor: 5}
+- model: slaves.flag
+  pk: 12
+  fields: {name: RS1 Status DO Power failure, bit_location: 11, sensor: 5}
+- model: slaves.flag
+  pk: 13
+  fields: {name: RS1 Status DO Emergency, bit_location: 12, sensor: 5}
+- model: slaves.flag
+  pk: 14
+  fields: {name: RS1 Status DO Fan, bit_location: 13, sensor: 5}
+- model: slaves.flag
+  pk: 15
+  fields: {name: RS1 DO Spare 1, bit_location: 14, sensor: 5}
+- model: slaves.flag
+  pk: 16
+  fields: {name: RS1 DO Spare 2, bit_location: 15, sensor: 5}
+- model: slaves.flag
+  pk: 17
+  fields: {name: RS2 Status DI Strobe Light, bit_location: 0, sensor: 7}
+- model: slaves.flag
+  pk: 18
+  fields: {name: RS2 Status DI PA system, bit_location: 1, sensor: 7}
+- model: slaves.flag
+  pk: 19
+  fields: {name: RS2 Status DI Hooter, bit_location: 2, sensor: 7}
+- model: slaves.flag
+  pk: 20
+  fields: {name: RS2 Status DI Power failure, bit_location: 3, sensor: 7}
+- model: slaves.flag
+  pk: 21
+  fields: {name: RS2 Status DI Emergency, bit_location: 4, sensor: 7}
+- model: slaves.flag
+  pk: 22
+  fields: {name: RS2 DI Spare 1, bit_location: 5, sensor: 7}
+- model: slaves.flag
+  pk: 23
+  fields: {name: RS2 DI Spare 2, bit_location: 6, sensor: 7}
+- model: slaves.flag
+  pk: 24
+  fields: {name: RS2 DI Spare 3, bit_location: 7, sensor: 7}
+- model: slaves.flag
+  pk: 25
+  fields: {name: RS2 Status DO Strobe Light, bit_location: 8, sensor: 7}
+- model: slaves.flag
+  pk: 26
+  fields: {name: RS2 Status DO PA system, bit_location: 9, sensor: 7}
+- model: slaves.flag
+  pk: 27
+  fields: {name: RS2 Status DO Hooter, bit_location: 10, sensor: 7}
+- model: slaves.flag
+  pk: 28
+  fields: {name: RS2 Status DO Power failure, bit_location: 11, sensor: 7}
+- model: slaves.flag
+  pk: 29
+  fields: {name: RS2 Status DO Emergency, bit_location: 12, sensor: 7}
+- model: slaves.flag
+  pk: 30
+  fields: {name: RS2 Status DO Fan, bit_location: 13, sensor: 7}
+- model: slaves.flag
+  pk: 31
+  fields: {name: RS2 DO Spare 1, bit_location: 14, sensor: 7}
+- model: slaves.flag
+  pk: 32
+  fields: {name: RS2 DO Spare 2, bit_location: 15, sensor: 7}
+- model: slaves.flag
+  pk: 33
+  fields: {name: RS3 Status DI Strobe Light, bit_location: 0, sensor: 9}
+- model: slaves.flag
+  pk: 34
+  fields: {name: RS3 Status DI PA system, bit_location: 1, sensor: 9}
+- model: slaves.flag
+  pk: 35
+  fields: {name: RS3 Status DI Hooter, bit_location: 2, sensor: 9}
+- model: slaves.flag
+  pk: 36
+  fields: {name: RS3 Status DI Power failure, bit_location: 3, sensor: 9}
+- model: slaves.flag
+  pk: 37
+  fields: {name: RS3 Status DI Emergency, bit_location: 4, sensor: 9}
+- model: slaves.flag
+  pk: 38
+  fields: {name: RS3 DI Spare 1, bit_location: 5, sensor: 9}
+- model: slaves.flag
+  pk: 39
+  fields: {name: RS3 DI Spare 2, bit_location: 6, sensor: 9}
+- model: slaves.flag
+  pk: 40
+  fields: {name: RS3 DI Spare 3, bit_location: 7, sensor: 9}
+- model: slaves.flag
+  pk: 41
+  fields: {name: RS3 Status DO Strobe Light, bit_location: 8, sensor: 9}
+- model: slaves.flag
+  pk: 42
+  fields: {name: RS3 Status DO PA system, bit_location: 9, sensor: 9}
+- model: slaves.flag
+  pk: 43
+  fields: {name: RS3 Status DO Hooter, bit_location: 10, sensor: 9}
+- model: slaves.flag
+  pk: 44
+  fields: {name: RS3 Status DO Power failure, bit_location: 11, sensor: 9}
+- model: slaves.flag
+  pk: 45
+  fields: {name: RS3 Status DO Emergency, bit_location: 12, sensor: 9}
+- model: slaves.flag
+  pk: 46
+  fields: {name: RS3 Status DO Fan, bit_location: 13, sensor: 9}
+- model: slaves.flag
+  pk: 47
+  fields: {name: RS3 DO Spare 1, bit_location: 14, sensor: 9}
+- model: slaves.flag
+  pk: 48
+  fields: {name: RS3 DO Spare 2, bit_location: 15, sensor: 9}
+- model: slaves.flag
+  pk: 49
+  fields: {name: RS4 Status DI Strobe Light, bit_location: 0, sensor: 11}
+- model: slaves.flag
+  pk: 50
+  fields: {name: RS4 Status DI PA system, bit_location: 1, sensor: 11}
+- model: slaves.flag
+  pk: 51
+  fields: {name: RS4 Status DI Hooter, bit_location: 2, sensor: 11}
+- model: slaves.flag
+  pk: 52
+  fields: {name: RS4 Status DI Power failure, bit_location: 3, sensor: 11}
+- model: slaves.flag
+  pk: 53
+  fields: {name: RS4 Status DI Emergency, bit_location: 4, sensor: 11}
+- model: slaves.flag
+  pk: 54
+  fields: {name: RS4 DI Spare 1, bit_location: 5, sensor: 11}
+- model: slaves.flag
+  pk: 55
+  fields: {name: RS4 DI Spare 2, bit_location: 6, sensor: 11}
+- model: slaves.flag
+  pk: 56
+  fields: {name: RS4 DI Spare 3, bit_location: 7, sensor: 11}
+- model: slaves.flag
+  pk: 57
+  fields: {name: RS4 Status DO Strobe Light, bit_location: 8, sensor: 11}
+- model: slaves.flag
+  pk: 58
+  fields: {name: RS4 Status DO PA system, bit_location: 9, sensor: 11}
+- model: slaves.flag
+  pk: 59
+  fields: {name: RS4 Status DO Hooter, bit_location: 10, sensor: 11}
+- model: slaves.flag
+  pk: 60
+  fields: {name: RS4 Status DO Power failure, bit_location: 11, sensor: 11}
+- model: slaves.flag
+  pk: 61
+  fields: {name: RS4 Status DO Emergency, bit_location: 12, sensor: 11}
+- model: slaves.flag
+  pk: 62
+  fields: {name: RS4 Status DO Fan, bit_location: 13, sensor: 11}
+- model: slaves.flag
+  pk: 63
+  fields: {name: RS4 DO Spare 1, bit_location: 14, sensor: 11}
+- model: slaves.flag
+  pk: 64
+  fields: {name: RS4 DO Spare 2, bit_location: 15, sensor: 11}
+- model: slaves.flag
+  pk: 65
+  fields: {name: RS5 Status DI Strobe Light, bit_location: 0, sensor: 13}
+- model: slaves.flag
+  pk: 66
+  fields: {name: RS5 Status DI PA system, bit_location: 1, sensor: 13}
+- model: slaves.flag
+  pk: 67
+  fields: {name: RS5 Status DI Hooter, bit_location: 2, sensor: 13}
+- model: slaves.flag
+  pk: 68
+  fields: {name: RS5 Status DI Power failure, bit_location: 3, sensor: 13}
+- model: slaves.flag
+  pk: 69
+  fields: {name: RS5 Status DI Emergency, bit_location: 4, sensor: 13}
+- model: slaves.flag
+  pk: 70
+  fields: {name: RS5 DI Spare 1, bit_location: 5, sensor: 13}
+- model: slaves.flag
+  pk: 71
+  fields: {name: RS5 DI Spare 2, bit_location: 6, sensor: 13}
+- model: slaves.flag
+  pk: 72
+  fields: {name: RS5 DI Spare 3, bit_location: 7, sensor: 13}
+- model: slaves.flag
+  pk: 73
+  fields: {name: RS5 Status DO Strobe Light, bit_location: 8, sensor: 13}
+- model: slaves.flag
+  pk: 74
+  fields: {name: RS5 Status DO PA system, bit_location: 9, sensor: 13}
+- model: slaves.flag
+  pk: 75
+  fields: {name: RS5 Status DO Hooter, bit_location: 10, sensor: 13}
+- model: slaves.flag
+  pk: 76
+  fields: {name: RS5 Status DO Power failure, bit_location: 11, sensor: 13}
+- model: slaves.flag
+  pk: 77
+  fields: {name: RS5 Status DO Emergency, bit_location: 12, sensor: 13}
+- model: slaves.flag
+  pk: 78
+  fields: {name: RS5 Status DO Fan, bit_location: 13, sensor: 13}
+- model: slaves.flag
+  pk: 79
+  fields: {name: RS5 DO Spare 1, bit_location: 14, sensor: 13}
+- model: slaves.flag
+  pk: 80
+  fields: {name: RS5 DO Spare 2, bit_location: 15, sensor: 13}
+- model: slaves.flag
+  pk: 81
+  fields: {name: Master Status DI Strobe Light, bit_location: 0, sensor: 15}
+- model: slaves.flag
+  pk: 82
+  fields: {name: Master Status DI PA system, bit_location: 1, sensor: 15}
+- model: slaves.flag
+  pk: 83
+  fields: {name: Master Status DI Hooter, bit_location: 2, sensor: 15}
+- model: slaves.flag
+  pk: 84
+  fields: {name: Master Status DI Power failure, bit_location: 3, sensor: 15}
+- model: slaves.flag
+  pk: 85
+  fields: {name: Master Status DI Emergency, bit_location: 4, sensor: 15}
+- model: slaves.flag
+  pk: 86
+  fields: {name: Master DI Spare 1, bit_location: 5, sensor: 15}
+- model: slaves.flag
+  pk: 87
+  fields: {name: Master DI Spare 2, bit_location: 6, sensor: 15}
+- model: slaves.flag
+  pk: 88
+  fields: {name: Master DI Spare 3, bit_location: 7, sensor: 15}
+- model: slaves.flag
+  pk: 89
+  fields: {name: Master Status DO Strobe Light, bit_location: 8, sensor: 15}
+- model: slaves.flag
+  pk: 90
+  fields: {name: Master Status DO PA system, bit_location: 9, sensor: 15}
+- model: slaves.flag
+  pk: 91
+  fields: {name: Master Status DO Hooter, bit_location: 10, sensor: 15}
+- model: slaves.flag
+  pk: 92
+  fields: {name: Master Status DO Power failure, bit_location: 11, sensor: 15}
+- model: slaves.flag
+  pk: 93
+  fields: {name: Master Status DO Emergency, bit_location: 12, sensor: 15}
+- model: slaves.flag
+  pk: 94
+  fields: {name: Master Status DO Fan, bit_location: 13, sensor: 15}
+- model: slaves.flag
+  pk: 95
+  fields: {name: Master DO Spare 1, bit_location: 14, sensor: 15}
+- model: slaves.flag
+  pk: 96
+  fields: {name: Master DO Spare 2, bit_location: 15, sensor: 15}
+- model: slaves.flag
+  pk: 97
+  fields: {name: RS1 OFC Health, bit_location: 0, sensor: 17}
+- model: slaves.flag
+  pk: 98
+  fields: {name: RS2 OFC Health, bit_location: 1, sensor: 17}
+- model: slaves.flag
+  pk: 99
+  fields: {name: RS3 OFC Health, bit_location: 2, sensor: 17}
+- model: slaves.flag
+  pk: 100
+  fields: {name: RS4 OFC Health, bit_location: 3, sensor: 17}
+- model: slaves.flag
+  pk: 101
+  fields: {name: RS5 OFC Health, bit_location: 4, sensor: 17}
+- model: slaves.flag
+  pk: 102
+  fields: {name: RS1 GSM Health, bit_location: 5, sensor: 17}
+- model: slaves.flag
+  pk: 103
+  fields: {name: RS2 GSM Health, bit_location: 6, sensor: 17}
+- model: slaves.flag
+  pk: 104
+  fields: {name: RS3 GSM Health, bit_location: 7, sensor: 17}
+- model: slaves.flag
+  pk: 105
+  fields: {name: RS4 GSM Health, bit_location: 8, sensor: 17}
+- model: slaves.flag
+  pk: 106
+  fields: {name: RS5 GSM Health, bit_location: 9, sensor: 17}
+- model: slaves.flag
+  pk: 107
+  fields: {name: Master Test GSM Health Manual, bit_location: 10, sensor: 17}
+- model: slaves.flag
+  pk: 108
+  fields: {name: Master Auto GSM health test ON, bit_location: 11, sensor: 17}
+- model: slaves.threshold
+  pk: 3
+  fields: {threshold: 39.0, sensor: 19, address: 15}
+- model: slaves.alert
+  pk: 1
+  fields: {name: SMS, alert_type: SMS, enabled: true, sender: TXTLCL, receiver: '918076150686,919167361287',
+    default_expiry_time: 30, expires_at: ! '2018-07-03 08:40:26+00:00'}

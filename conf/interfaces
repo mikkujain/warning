@@ -1,0 +1,17 @@
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+auto enp4s0
+auto enp4s0:0
+
+iface enp4s0 inet dhcp
+  metric 0
+
+iface enp4s0:0 inet static
+  address 192.168.0.99
+  netmask 255.255.255.0
+  network 192.168.0.0
+  metric 1
+
+

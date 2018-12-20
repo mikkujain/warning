@@ -1,0 +1,18 @@
+[Unit]
+Description=Warning system gunicorn daemon
+After=network.target
+
+[Service]
+User=teleconsystems
+Group=www-data
+WorkingDirectory=/home/teleconsystems/warning-system
+ExecStart=/home/teleconsystems/warning-system/venv/bin/gunicorn \
+             --access-logfile - \
+             --workers 2 \
+             --timeout 60 \
+             --env DJANGO_SETTINGS_MODULE=warningsystem.settings \
+             --bind unix:/home/teleconsystems/warning-system/warningsystem.sock \
+             warningsystem.wsgi:application
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,6 @@
+# Run the hourly jobs
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+
+*/10 * * * * teleconsystems /usr/bin/curl http://127.0.0.1:80/slaves/# &> /dev/null
