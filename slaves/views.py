@@ -65,11 +65,11 @@ def refresh_values(request):
     errors = []
     sensor_data = []
     thresholds = []
-    slave = None
+    subordinate = None
     client = None
 
     try:
-        slave = Slave.objects.get(primary=True)
+        subordinate = Subordinate.objects.get(primary=True)
     except Exception as err:
         print(err)
         e = {'error': True,
@@ -80,14 +80,14 @@ def refresh_values(request):
         return result
 
     try:
-        client = ModbusTcpClient(slave.ip, slave.port)
+        client = ModbusTcpClient(subordinate.ip, subordinate.port)
 
         system = System.objects.get(id=1) # XXX: hard-coding
 
-        for sensor in slave.sensor_set.all():
+        for sensor in subordinate.sensor_set.all():
             sensor_values = client.read_holding_registers(address=sensor.address,
                                                           count=sensor.nregisters,
-                                                          unit=slave.sid)
+                                                          unit=subordinate.sid)
             if sensor_values.isError():
                 raise Exception(sensor_values)
 
@@ -131,7 +131,7 @@ def refresh_values(request):
                     sensor_threshold = client.read_holding_registers(
                         address=addr,
                         count=1, # XXX: only 1 register for thresholds
-                        unit=slave.sid
+                        unit=subordinate.sid
                     )
                     if sensor_threshold.isError():
                         raise Exception(sensor_threshold)
@@ -186,7 +186,7 @@ def refresh_values(request):
 
     values_string = ','.join([sensor['name']+': '+str(sensor['value']) for sensor in sensor_data])
     log = Log(timestamp=timezone.now(),
-              slave_id=slave.sid,
+              subordinate_id=subordinate.sid,
               eventid=0,          # XXX: hard-coding
               event_name='refresh_values',
               event_msg=values_string,
@@ -195,9 +195,9 @@ def refresh_values(request):
     log.save()
 
     with open('system.log', 'at', newline='') as f: # XXX: db config
-        fieldnames = ['timestamp', 'slave_id', 'eventid', 'event_name', 'event_msg', 'value']
+        fieldnames = ['timestamp', 'subordinate_id', 'eventid', 'event_name', 'event_msg', 'value']
         writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
-        writer.writerow([log.timestamp, log.slave_id, log.eventid,
+        writer.writerow([log.timestamp, log.subordinate_id, log.eventid,
                          log.event_name, log.event_msg, log.value])
 
     return result
@@ -205,10 +205,10 @@ def refresh_values(request):
 
 def toggle_flag(request):
     try:
-        slave = Slave.objects.get(primary=True)
+        subordinate = Subordinate.objects.get(primary=True)
 
     except djexcept.ObjectDoesNotExist:
-        err = 'No primary slave found.'
+        err = 'No primary subordinate found.'
         print(err)
         e = {'error': True,
              'message': err}
@@ -216,7 +216,7 @@ def toggle_flag(request):
         return result
 
     except djexcept.MultipleObjectsReturned:
-        err = 'Multiple primary slaves found, please select one.'
+        err = 'Multiple primary subordinates found, please select one.'
         print(err)
         e = {'error': True,
              'message': err}
@@ -226,11 +226,11 @@ def toggle_flag(request):
 
     client = None
     try:
-        client = ModbusTcpClient(slave.ip, slave.port)
+        client = ModbusTcpClient(subordinate.ip, subordinate.port)
         obj = Flag.objects.filter(name=request.POST.get('flag')).get()
         current_value = client.read_holding_registers(address=obj.sensor.address,
                                                       count=obj.sensor.nregisters,
-                                                      unit=slave.sid)
+                                                      unit=subordinate.sid)
 
         current_value = current_value.registers
 
@@ -239,7 +239,7 @@ def toggle_flag(request):
             future_value = current_value ^ (1 << obj.bit_location)
             value = client.write_register(address=obj.sensor.address,
                                           value=future_value,
-                                          unit=slave.sid)
+                                          unit=subordinate.sid)
             if value.isError():
                 raise Exception(value)
 

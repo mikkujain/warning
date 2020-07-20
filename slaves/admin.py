@@ -6,9 +6,9 @@ from pymodbus.exceptions import *
 class ThresholdAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         print('save_model(): ')
-        slave = obj.sensor.slave
+        subordinate = obj.sensor.subordinate
         try:
-            client = ModbusTcpClient(slave.ip, slave.port)
+            client = ModbusTcpClient(subordinate.ip, subordinate.port)
 
             if obj.sensor.multiplication_factor != 1:
                 obj.threshold = int(obj.threshold / obj.sensor.multiplication_factor)
@@ -16,7 +16,7 @@ class ThresholdAdmin(admin.ModelAdmin):
 
             value = client.write_register(address=obj.address,
                                           value=obj.threshold,
-                                          unit=slave.sid)
+                                          unit=subordinate.sid)
             if value.isError():
                 raise Exception(value)
             else:
@@ -40,8 +40,8 @@ class LogAdmin(admin.ModelAdmin):
 from .models import System
 admin.site.register(System)
 
-from .models import Slave
-admin.site.register(Slave)
+from .models import Subordinate
+admin.site.register(Subordinate)
 
 from .models import Sensor
 admin.site.register(Sensor, SensorAdmin)

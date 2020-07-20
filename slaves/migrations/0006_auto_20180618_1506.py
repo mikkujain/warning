@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('slaves', '0005_threshold_address'),
+        ('subordinates', '0005_threshold_address'),
     ]
 
     operations = [

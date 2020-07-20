@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    #'slaves.apps.SlavesConfig',
+    #'subordinates.apps.SubordinatesConfig',
     'sms.apps.SmsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'slaves',
+    'subordinates',
     'graphos',
 ]
 
@@ -112,10 +112,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'slaves/static'),
+    os.path.join(BASE_DIR, 'subordinates/static'),
 ]
 
-LOGIN_REDIRECT_URL = '/slaves/'
+LOGIN_REDIRECT_URL = '/subordinates/'
 LOGOUT_REDIRECT_URL = '/'
 
 MEDIA_URL = '/media/'
