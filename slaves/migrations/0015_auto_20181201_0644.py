@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('slaves', '0014_flag_send_alert'),
+        ('subordinates', '0014_flag_send_alert'),
     ]
 
     operations = [

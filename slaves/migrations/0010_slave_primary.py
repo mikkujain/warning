@@ -6,12 +6,12 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('slaves', '0009_auto_20180630_0655'),
+        ('subordinates', '0009_auto_20180630_0655'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='slave',
+            model_name='subordinate',
             name='primary',
             field=models.BooleanField(default=False),
         ),

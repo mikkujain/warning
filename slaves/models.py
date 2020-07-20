@@ -2,12 +2,12 @@ from django.db import models
 
 class System(models.Model):
     name = models.CharField(max_length=100)
-    number_slaves = models.IntegerField()
+    number_subordinates = models.IntegerField()
 
     def __str__(self):
         return self.name
 
-class Slave(models.Model):
+class Subordinate(models.Model):
     name = models.CharField(max_length=100, default='')
     sid = models.IntegerField()
     ip = models.GenericIPAddressField(protocol='IPv4')
@@ -23,7 +23,7 @@ class Sensor(models.Model):
     name = models.CharField(max_length=100)
     address = models.IntegerField()
     nregisters = models.IntegerField()
-    slave = models.ForeignKey('Slave', on_delete=models.CASCADE)
+    subordinate = models.ForeignKey('Subordinate', on_delete=models.CASCADE)
     isFlags = models.BooleanField(default=False)
     multiplication_factor = models.FloatField(default=1)
     img = models.ImageField(null=True, blank=True, upload_to='media')
@@ -67,7 +67,7 @@ class Threshold(models.Model):
 
 class Log(models.Model):
     timestamp = models.DateTimeField()
-    slave_id = models.IntegerField()
+    subordinate_id = models.IntegerField()
     eventid = models.IntegerField()
     event_name = models.CharField(max_length=100)
     event_msg = models.TextField()
