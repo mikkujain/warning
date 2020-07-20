@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('timestamp', models.DateTimeField()),
-                ('slave_id', models.IntegerField()),
+                ('subordinate_id', models.IntegerField()),
                 ('eventid', models.IntegerField()),
                 ('event_name', models.CharField(max_length=100)),
                 ('event_msg', models.TextField()),
@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Slave',
+            name='Subordinate',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('sid', models.IntegerField()),
@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
-                ('number_slaves', models.IntegerField()),
+                ('number_subordinates', models.IntegerField()),
             ],
         ),
         migrations.CreateModel(
@@ -63,22 +63,22 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('threshold', models.FloatField()),
-                ('sensor', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='slaves.Sensor')),
+                ('sensor', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='subordinates.Sensor')),
             ],
         ),
         migrations.AddField(
-            model_name='slave',
+            model_name='subordinate',
             name='system',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='slaves.System'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='subordinates.System'),
         ),
         migrations.AddField(
             model_name='sensor',
-            name='slave',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='slaves.Slave'),
+            name='subordinate',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='subordinates.Subordinate'),
         ),
         migrations.AddField(
             model_name='flag',
             name='sensor',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='slaves.Sensor'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='subordinates.Sensor'),
         ),
     ]

@@ -22,7 +22,7 @@ from django.conf import settings
 urlpatterns = [
     path('', auth_views.LoginView.as_view(redirect_authenticated_user=True), name="login"),
     path('logout/', auth_views.LogoutView.as_view(), name="logout"),
-    path('slaves/', include('slaves.urls')),
+    path('subordinates/', include('subordinates.urls')),
     path('admin/', admin.site.urls),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

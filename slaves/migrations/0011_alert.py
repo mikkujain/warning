@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('slaves', '0010_slave_primary'),
+        ('subordinates', '0010_subordinate_primary'),
     ]
 
     operations = [
